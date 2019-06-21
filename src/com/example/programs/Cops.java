@@ -9,6 +9,8 @@ import java.util.Scanner;
 
 public class Cops {
 
+	int[] h;
+
 	public static void main(String[] args) throws Exception {
 		try {
 			Scanner s = new Scanner(System.in);
@@ -30,94 +32,85 @@ public class Cops {
 				System.out.println(list.get(i));
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 	}
 
-	private int checkNow(int max, int[] a) {
-		Queue<Myobj> p = new LinkedList<>();
-		for (int i = 0; i < a.length; i++) {
-			int low = a[i] - max <= 0 ? 1 : a[i] - max;
-			int high = a[i] + max > 100 ? 100 : a[i] + max;
-			if (low == 1 && high == 100)
-				return 0;
-			else {
-				if (p.size() > 0) {
-					int count = p.size();
-					while (count > 0) {
-						Myobj m = ((LinkedList<Myobj>) p).peekFirst();
-						int pLow = m.a;
-						int pHigh = m.b;
-						boolean fIndex = between(low, pLow, pHigh);
-						boolean sIndex = between(high, pLow, pHigh);
-						if (fIndex && sIndex) {
-							count--;
-							continue;
-						} else {
-							if (low < pLow && high > pHigh) {
-								p.remove(m);
-								Myobj mNew = new Myobj(low, high);
-								p.add(mNew);
-							} else if (low > pLow && low < pHigh && high > pHigh) {
-								p.remove(m);
-								Myobj mNew = new Myobj(pLow, high);
-								p.add(mNew);
-							} else if (low < pLow && low < pHigh && high < pHigh) {
-								p.remove(m);
-								Myobj mNew = new Myobj(low, pHigh);
-								p.add(mNew);
-							} else {
-								Myobj mNew = new Myobj(low, high);
-								p.add(mNew);
-							}
-						}
-						count--;
-					}
-				} else {
-					Myobj mNew = new Myobj(low, high);
-					p.add(mNew);
-				}
+	int checkNow(int max, int[] a) {
+		h = sort(a, 0, a.length - 1);
+		for (int i = 1; i <= 2; i++) {
+			int index = findNearestCop(h, i);
+			System.out.println("" + index);
+		}
+		return 0;
+	}
+
+	private int findNearestCop(int[] a, int thief) {
+		return search(a, 0, a.length, thief, -1);
+	}
+
+	int search(int[] a, int l, int h, int key, int prevMid) {
+		int index = -1;
+		int mid = (l + h) / 2;
+		if (a[mid] == key)
+			return mid;
+		if (prevMid != -1)
+			if (a[mid] < key && a[prevMid] > key)
+				return prevMid;
+		if (prevMid != -1)
+			if (a[mid] > key && a[prevMid] < key)
+				return prevMid;
+		if (prevMid != -1) {
+			if (a[mid] > key && a[prevMid] > key)
+				index = search(a, l, mid - 1, key, mid);
+		} else if (a[mid] > key)
+			index = search(a, l, mid - 1, key, mid);
+		if (prevMid != -1) {
+			if (a[mid] < key && a[prevMid] < key)
+				index = search(a, mid + 1, h, key, mid);
+		} else if (a[mid] < key)
+			index = search(a, mid + 1, h, key, mid);
+		return index;
+	}
+
+	// quicksort
+	int[] sort(int[] a, int low, int high) {
+		obj o;
+		if (low < high) {
+			o = partition(a, low, high);
+			sort(o.a, low, o.pivotI - 1);
+			sort(o.a, o.pivotI + 1, high);
+		}
+		return a;
+	}
+
+	obj partition(int[] a, int low, int high) {
+		int pivot = a[high];
+		int i = low - 1;
+		for (int j = low; j <= high - 1; j++) {
+			if (a[j] < pivot) {
+				i++;
+				int temp = a[j];
+				a[j] = a[i];
+				a[i] = temp;
 			}
 		}
-
-		Comparator<Myobj> stringLengthComparator = new Comparator<Myobj>() {
-			@Override
-			public int compare(Myobj s1, Myobj s2) {
-				return s1.a - s2.a;
-			}
-		};
-		PriorityQueue<Myobj> pq = new PriorityQueue<>(stringLengthComparator);
-		while (p.size() > 0) {
-			pq.add(p.poll());
-		}
-		int sum = 0;
-		Myobj prev;
-		Myobj last = null;
-		sum = sum + ((prev = pq.poll()).a - 1);
-		while (pq.size() > 0) {
-			Myobj l = pq.peek();
-			sum = sum + (l.a - prev.b - 1);
-			last = pq.poll();
-		}
-		if (last != null)
-			sum = sum + (100 - last.b);
-		else {
-			sum = sum + (100 - prev.b);
-		}
-		return sum;
+		int temp = a[i + 1];
+		a[i + 1] = a[high];
+		a[high] = temp;
+		return new obj(a, i + 1);
 	}
 
-	public static boolean between(int i, int minValueInclusive, int maxValueInclusive) {
-		return (i >= minValueInclusive && i <= maxValueInclusive);
-	}
+	class obj {
+		int[] a;
+		int pivotI;
 
-	class Myobj {
-		int a;
-		int b;
-
-		public Myobj(int a, int b) {
+		public obj(int[] a, int pivotI) {
+			super();
 			this.a = a;
-			this.b = b;
+			this.pivotI = pivotI;
 		}
+
 	}
+
 }
