@@ -3,6 +3,8 @@ package com.example.programs;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+//https://www.codechef.com/problems/LECANDY
+
 public class Lecandy {
 
     public static void main(String[] args) {

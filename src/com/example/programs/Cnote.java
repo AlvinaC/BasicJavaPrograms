@@ -3,7 +3,7 @@ package com.example.programs;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.plaf.synth.SynthLookAndFeel;
+//https://www.codechef.com/problems/CNOTE
 
 public class Cnote {
 

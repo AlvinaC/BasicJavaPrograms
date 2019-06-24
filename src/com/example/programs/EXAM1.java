@@ -3,6 +3,8 @@ package com.example.programs;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+//https://www.codechef.com/COOK107B/problems/EXAM1/
+
 public class EXAM1 {
 
     public static void main(String[] args) throws Exception {
