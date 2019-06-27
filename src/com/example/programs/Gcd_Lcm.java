@@ -3,7 +3,7 @@ package com.example.programs;
 import java.util.Scanner;
 
 public class Gcd_Lcm {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		Scanner s = new Scanner(System.in);
 		System.out.println("Enter X:");
 		int x = s.nextInt();
