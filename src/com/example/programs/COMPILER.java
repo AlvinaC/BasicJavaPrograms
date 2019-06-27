@@ -1,8 +1,8 @@
 package com.example.programs;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 public class COMPILER {
 	class StackLinkedList {
@@ -32,9 +32,14 @@ public class COMPILER {
 			}
 		}
 
+		boolean isEmpty() {
+			if (root == null)
+				return true;
+			return false;
+		}
+
 		char pop() {
 			if (root == null) {
-				// System.out.println("Empty");
 				return ' ';
 			} else {
 				Node temp = root;
@@ -46,41 +51,37 @@ public class COMPILER {
 
 	public static void main(String[] args) throws Exception {
 		try {
-			try (Scanner in = new Scanner(System.in)) {
-				while (in.hasNextLine()) {
-					try {
-						String line = in.nextLine();
-						Scanner lineScan = new Scanner(line);
-						ArrayList<Integer> list = new ArrayList<Integer>();
-						COMPILER compiler = new COMPILER();
-						int tc = lineScan.nextInt();
-						for (int i = 0; i < tc; i++) {
-							COMPILER.StackLinkedList stack = compiler.new StackLinkedList();
-							int count = 0;
-							String st = lineScan.next();
-							for (int j = 0; j < st.length(); j++) {
-								if (st.charAt(j) == '<')
-									stack.push('<');
-								else {
-									char popped = stack.pop();
-									if (popped != ' ')
-										count += 2;
-								}
-							}
-							list.add(count);
-						}
-						for (int i = 0; i < tc; i++)
-							System.out.println(list.get(i));
-						// do something
-					} catch (NoSuchElementException | IllegalStateException e) {
+			ArrayList<Integer> list = new ArrayList<Integer>();
+			COMPILER compiler = new COMPILER();
 
+			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+			int tc = Integer.parseInt(reader.readLine().trim());
+
+			for (int i = 0; i < tc; i++) {
+				String p = reader.readLine().trim();
+				COMPILER.StackLinkedList stack = compiler.new StackLinkedList();
+				int count = 0;
+
+				for (int j = 0; j < p.length(); j++) {
+					if (p.charAt(j) == '<')
+						stack.push('<');
+					else {
+						char popped = stack.pop();
+						if (popped == ' ')
+							break;
+						if (stack.isEmpty())
+							count = j + 1;
 					}
 				}
+				list.add(count);
 			}
+
+			for (int i = 0; i < tc; i++)
+				System.out.println(list.get(i));
+
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-
 	}
 
 }
