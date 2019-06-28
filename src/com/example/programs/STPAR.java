@@ -3,6 +3,8 @@ package com.example.programs;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+//https://www.spoj.com/problems/STPAR/
+
 public class STPAR {
 
 	class StackLinkedList {

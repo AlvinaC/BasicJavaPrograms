@@ -1,5 +1,7 @@
 package com.example.programs;
 
+//https://www.spoj.com/problems/ONP/
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
