@@ -2,6 +2,8 @@ package com.example.programs;
 
 import java.util.Scanner;
 
+//http://codeforces.com/problemset/problem/281/D
+
 public class MaxXOR {
 
 	class StackLinkedList {
