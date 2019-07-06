@@ -2,6 +2,8 @@ package com.example.programs;
 
 import java.util.Scanner;
 
+//https://codeforces.com/contest/5/problem/C
+
 public class LongestBracket {
 
 	class StackLinkedList {
@@ -58,25 +60,53 @@ public class LongestBracket {
 		}
 	}
 
-	public static void main(String[] args) {
-		Scanner s = new Scanner(System.in);
-		String str = s.next();
-		LongestBracket compiler = new LongestBracket();
-		LongestBracket.StackLinkedList stack = compiler.new StackLinkedList();
-		for (int i = 0; i < str.length(); i++) {
-			if (str.charAt(i) == '(')
-				stack.push(i);
-			else {
-				int length = 0;
-				if (!stack.isEmpty()) {
-					int temp = i - stack.peek();
-					length = length > temp ? length : temp;
-					stack.pop();
-					if (stack.isEmpty())
-						stack.push(i);
+	public static void main(String[] args) throws Exception {
+		try {
+			Scanner s = new Scanner(System.in);
+			String str = s.next();
+			int length = 0;
+			int count = 0;
+			LongestBracket compiler = new LongestBracket();
+			LongestBracket.StackLinkedList stack = compiler.new StackLinkedList();
+			LongestBracket.StackLinkedList number = compiler.new StackLinkedList();
+			stack.push(-1);
+			for (int i = 0; i < str.length(); i++) {
+				if (str.charAt(i) == '(')
+					stack.push(i);
+				else {
+					if (!stack.isEmpty()) {
+						stack.pop();
+						if (stack.isEmpty())
+							stack.push(i);
+						else {
+							int temp = i - stack.peek();
+							if (number.isEmpty()) {
+								number.push(temp);
+							} else if (!number.isEmpty() && number.peek() > temp) {
+
+							} else {
+								while (!number.isEmpty() && number.peek() != temp) {
+									number.pop();
+								}
+								number.push(temp);
+							}
+						}
+					}
 				}
 			}
+			if (!number.isEmpty()) {
+				length = number.peek();
+				while (!number.isEmpty()) {
+					count = count + 1;
+					number.pop();
+				}
+				System.out.println(length + " " + count);
+			} else {
+				System.out.println(length + " " + "1");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
-
 }
