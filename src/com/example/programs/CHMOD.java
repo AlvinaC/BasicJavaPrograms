@@ -9,26 +9,35 @@ public class CHMOD {
 		CHMOD c = new CHMOD();
 		int n = s.nextInt();
 		int[] a = new int[n];
+		for (int i = 0; i < n; i++)
+			a[i] = s.nextInt();
 		int q = s.nextInt();
 		Integer[] p = c.findPrimes(1, 100);
-		int[][] cf = new int[n][p.length];
-		c.findCumulativeFrequency(cf, p, a);
+		int[][] cf = c.findCumulativeFrequency(p, a);
 		for (int i = 0; i < q; i++) {
 			int left = s.nextInt();
 			int right = s.nextInt();
 			int mod = s.nextInt();
+			
 		}
 	}
 
-	private void findCumulativeFrequency(int[][] cf, Integer[] p, int[] a) {
+	private int[][] findCumulativeFrequency(Integer[] p, int[] a) {
+		int[][] cf = new int[a.length][p.length];
 		for (int i = 0; i < a.length; i++) {
-			int quotient;
-			for (int j = 0; j < p.length; j++) {
-				int temp = a[i] % p[j];
-				if(temp==0)
+			int quotient = a[i];
+			while (quotient != 1) {
+				for (int j = 0; j < p.length; j++) {
+					int temp = quotient % p[j];
+					if (temp == 0) {
+						cf[i][j]++;
+						quotient = quotient / p[j];
+						break;
+					}
+				}
 			}
 		}
-
+		return cf;
 	}
 
 	private Integer[] findPrimes(int x, int y) {
