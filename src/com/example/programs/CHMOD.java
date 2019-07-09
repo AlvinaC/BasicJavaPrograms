@@ -4,43 +4,50 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CHMOD {
-	public static void main(String[] args) {
-		Scanner s = new Scanner(System.in);
-		CHMOD c = new CHMOD();
-		int n = s.nextInt();
-		int[] a = new int[n];
-		for (int i = 0; i < n; i++)
-			a[i] = s.nextInt();
-		int q = s.nextInt();
-		Integer[] p = c.findPrimes(1, 100);
-		int[][] cf = c.findCumulativeFrequency(p, a);
-		for (int i = 0; i < q; i++) {
-			int left = s.nextInt();
-			int right = s.nextInt();
-			int mod = s.nextInt();
-			int r = right - 1;
-			int l = left - 2;
-			int finalAns = 0;
-			for (int j = 0; j < p.length; j++) {
-				int re;
-				if (l >= 0)
-					re = cf[right - 1][j] - cf[left - 2][j];
-				else
-					re = cf[right - 2][j];
-				int prod = c.pow(p[j], re, mod) % mod;
-				finalAns = finalAns * prod;
+	public static void main(String[] args) throws Exception {
+		try {
+			Scanner s = new Scanner(System.in);
+			ArrayList<Long> list = new ArrayList<Long>();
+			CHMOD c = new CHMOD();
+			int n = s.nextInt();
+			long[] a = new long[n];
+			for (int i = 0; i < n; i++)
+				a[i] = s.nextLong();
+			int q = s.nextInt();
+			Integer[] p = c.findPrimes(1, 100);
+			long[][] cf = c.findCumulativeFrequency(p, a);
+			for (int i = 0; i < q; i++) {
+				int left = s.nextInt();
+				int right = s.nextInt();
+				long mod = s.nextLong();
+				long finalAns = 1;
+				for (int j = 0; j < p.length; j++) {
+					long re;
+					if (left - 2 >= 0)
+						re = cf[right - 1][j] - cf[left - 2][j];
+					else
+						re = cf[right - 1][j];
+					long prod = c.pow(p[j], re, mod) % mod;
+					finalAns = (finalAns * prod) % mod;
+				}
+				list.add(finalAns);
 			}
-			System.out.println(finalAns);
+			for (int i = 0; i < list.size(); i++)
+				System.out.println(list.get(i));
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
 
-	private int[][] findCumulativeFrequency(Integer[] p, int[] a) {
-		int[][] cf = new int[a.length][p.length];
+	private long[][] findCumulativeFrequency(Integer[] p, long[] a) {
+		long[][] cf = new long[a.length][p.length];
 		for (int i = 0; i < a.length; i++) {
-			int quotient = a[i];
+			if (i - 1 >= 0)
+				System.arraycopy(cf[i - 1], 0, cf[i], 0, p.length);
+			long quotient = a[i];
 			while (quotient != 1) {
 				for (int j = 0; j < p.length; j++) {
-					int temp = quotient % p[j];
+					long temp = quotient % p[j];
 					if (temp == 0) {
 						cf[i][j]++;
 						quotient = quotient / p[j];
@@ -70,17 +77,14 @@ public class CHMOD {
 		return true;
 	}
 
-	private int pow(int base, int exp, int mod) {
-		if (exp == 1)
-			return base;
-		else {
-			if (exp % 2 == 0) {
-				int ans = pow(pow(base, exp / 2, mod), 2, mod);
-				return ans % mod;
-			} else {
-				int ans = base * pow(pow(base, (exp - 1) / 2, mod), 2, mod);
-				return ans % mod;
-			}
+	private long pow(long base, long exp, long mod) {
+		long ans = 1;
+		while (exp > 0) {
+			if (exp % 2 == 1)
+				ans = (ans * base) % mod;
+			exp = exp >> 1;
+			base = (base * base) % mod;
 		}
+		return ans;
 	}
 }
