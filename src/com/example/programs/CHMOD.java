@@ -18,7 +18,19 @@ public class CHMOD {
 			int left = s.nextInt();
 			int right = s.nextInt();
 			int mod = s.nextInt();
-			
+			int r = right - 1;
+			int l = left - 2;
+			int finalAns = 0;
+			for (int j = 0; j < p.length; j++) {
+				int re;
+				if (l >= 0)
+					re = cf[right - 1][j] - cf[left - 2][j];
+				else
+					re = cf[right - 2][j];
+				int prod = c.pow(p[j], re, mod) % mod;
+				finalAns = finalAns * prod;
+			}
+			System.out.println(finalAns);
 		}
 	}
 
@@ -56,5 +68,19 @@ public class CHMOD {
 			if (no % i == 0)
 				return false;
 		return true;
+	}
+
+	private int pow(int base, int exp, int mod) {
+		if (exp == 1)
+			return base;
+		else {
+			if (exp % 2 == 0) {
+				int ans = pow(pow(base, exp / 2, mod), 2, mod);
+				return ans % mod;
+			} else {
+				int ans = base * pow(pow(base, (exp - 1) / 2, mod), 2, mod);
+				return ans % mod;
+			}
+		}
 	}
 }
