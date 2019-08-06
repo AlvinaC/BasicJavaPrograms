@@ -14,24 +14,17 @@ public class DSTAPLS {
 			int tc = Integer.parseInt(reader.readLine().trim());
 			for (int i = 0; i < tc; i++) {
 				String[] integersInString = reader.readLine().split(" ");
-				BigInteger n = new BigInteger(integersInString[0].trim());
-				BigInteger k = new BigInteger(integersInString[1].trim());
-				if (k.equals(BigInteger.ONE))
+				Double n = Double.parseDouble(integersInString[0].trim());
+				Double k = Double.parseDouble(integersInString[1].trim());
+				if (k == 1.0)
 					list.add("NO");
 				else {
-					BigInteger q = n.divide(k);
-					if (q.compareTo(BigInteger.ZERO) == 1) {
-						BigInteger l = q.divide(k);
-						if (l.compareTo(BigInteger.ZERO) == 1) {
-							BigInteger m = q.divide(l);
-
-							if (m.equals(k))
-								list.add("NO");
-							else
-								list.add("YES");
-						} else
-							list.add("YES");
-					} else
+					Double q = n / k;
+					Double l = q / k;
+					Double m = q / l;
+					if (m.equals(k))
+						list.add("NO");
+					else
 						list.add("YES");
 				}
 			}
@@ -40,7 +33,7 @@ public class DSTAPLS {
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
