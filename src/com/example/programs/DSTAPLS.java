@@ -18,13 +18,19 @@ public class DSTAPLS {
 				Double k = Double.parseDouble(integersInString[1].trim());
 				if (k == 1.0)
 					list.add("NO");
+				else if (n.equals(k))
+					list.add("YES");
 				else {
 					Double q = n / k;
 					Double l = q / k;
-					Double m = q / l;
-					if (m.equals(k))
-						list.add("NO");
-					else
+					Double m = q % l;
+					if (m == 0.0) {
+						Double o = q / l;
+						if (o.equals(k))
+							list.add("NO");
+						else
+							list.add("YES");
+					} else
 						list.add("YES");
 				}
 			}
